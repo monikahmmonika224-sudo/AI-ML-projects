@@ -1,0 +1,20 @@
+import pandas as pd
+df=pd.read_csv(r'C:\Users\lenovo\Desktop\titanic.csv')
+df.head()
+df.isna().sum()
+df['Age'].fillna(df['Age'].mean())
+
+df['Embarked']=df['Embarked'].astype('category')
+df['Embarked']=df['Embarked'].cat.codes
+print(df['Embarked'])
+df['Embarked'].fillna(df['Embarked'].mode())
+print(df['Embarked'])
+df.drop(['Cabin'],axis=1)
+print(df)
+df.drop(df[(df['Name']=="Braund,mr.Owen Harris")].index)
+df.drop(df[df['PassengerId']==1].index)
+print(df.drop)
+print("\nAfter cleaning:")
+print(df.head())
+print("\nMissing values after cleaning:")
+print(df.isna().sum())
