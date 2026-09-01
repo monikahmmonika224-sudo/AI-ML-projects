@@ -1,0 +1,25 @@
+import nltk
+from nltk import sent_tokenize,word_tokenize,pos_tag,ne_chunk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+text="The first time you see The Second Renaissance it may look boring.Look at it at least twice and watch part 2. It will change your view of the matrix.Are the human people the ones who started the war?Is AI a bad thing?"
+print("Original Text:\n",text)
+word_token=word_tokenize(text)
+print("\nWord Tokens:\n",word_token)
+elist=[i for i in word_token if i.isalpha()]
+print("\nAfter Punctuation Removal:\n",elist)
+stop_words=stopwords.words("english")
+elist=[i for i in elist if i.lower()not in stop_words]
+print("\nAfter Stopword Removal:\n",elist)
+tagged_words=pos_tag(elist)
+print("\nPOS Tags:\n",tagged_words)
+tree=ne_chunk(tagged_words,binary=True)
+print("\nNamed Entity Recognition Tree:\n",tree)
+lemma=WordNetLemmatizer()
+lemmatized_words=[lemma.lemmatize(i.lower())for i in elist]
+print("\nLemmatized Words:\n",lemmatized_words)
+vectorizer=TfidfVectorizer()
+x=vectorizer.fit_transform([''.join(lemmatized_words)])
+print("\nTF-IDF Mtrix:\n",x.toarray())
+print("\nTF-IDF Feature Names:\n",vectorizer.get_feature_names_out())
