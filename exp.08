@@ -1,0 +1,24 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split,GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+data=pd.read_csv(r'C:\Users\lenovo\Downloads\Breast_cancer.csv')
+print(data.info())
+data=data.drop(['id'],axis=1)
+X=data.drop(['diagnosis'],axis=1)
+y=data['diagnosis']
+x_train,x_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)
+model=DecisionTreeClassifier()
+model.fit(x_train,y_train)
+y_pred=model.predict(x_test)
+print("the accuracy of the model built is",accuracy_score(y_test,y_pred)*100)
+param_dict={
+'criterion':['gini','entropy'],
+'max_depth':range(1,10),
+'min_samples_split':range(2,10),
+'min_samples_leaf':range(1,5)
+}
+grid=GridSearchCV(model,param_grid=param_dict,cv=10,verbose=1,n_jobs=-1)
+grid.fit(x_train,y_train)
+print("Best score from GridSearchCV:",grid.best_score_)
+print("Best parameters found:",grid.best_params_)
